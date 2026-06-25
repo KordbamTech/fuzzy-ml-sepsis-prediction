@@ -1,0 +1,87 @@
+[System]
+Name='Sepsis_2_fis'
+Type='mamdani'
+Version=2.0
+NumInputs=7
+NumOutputs=1
+NumRules=9
+AndMethod='min'
+OrMethod='max'
+ImpMethod='min'
+AggMethod='max'
+DefuzzMethod='centroid'
+
+[Input1]
+Name='Cleaned_heart_rate_(HR)'
+Range=[0 180]
+NumMFs=3
+MF1='Low':'gaussmf',[31.85 -8.882e-16]
+MF2='Normal':'trapmf',[22.5 82.5 97.5 157.5]
+MF3='High':'trapmf',[112.5 172.5 187.5 247.5]
+
+[Input2]
+Name='Cleaned_systolic_bp_(sBP)'
+Range=[50 220]
+NumMFs=3
+MF1='Low':'trapmf',[-0.375 -0.04167 0.04167 0.375]
+MF2='Normal':'gaussmf',[0.1769 0.5]
+MF3='High':'sigmf',[13.18 0.7917]
+
+[Input3]
+Name='Cleaned_diastolic_bp_(dBP)'
+Range=[0.4 1.5]
+NumMFs=3
+MF1='Low':'trimf',[-0.0583333333333333 0.4 0.858333333333333]
+MF2='Normal':'trimf',[0.491666666666667 0.95 1.40833333333333]
+MF3='High':'trimf',[1.04166666666667 1.5 1.95833333333333]
+
+[Input4]
+Name='Cleaned_02_Saturation_(Sp02)'
+Range=[50 100]
+NumMFs=3
+MF1='Low':'trapmf',[31.25 47.92 52.08 68.75]
+MF2='Normal':'trimf',[54.1666666666667 75 95.8333333333333]
+MF3='High':'zmf',[102.1 118.7]
+
+[Input5]
+Name='Cleaned_resp_rate_(RR)'
+Range=[5 45]
+NumMFs=3
+MF1='Low':'trimf',[-0.416666666666667 0 0.416666666666667]
+MF2='Normal':'trimf',[0.0833333333333333 0.5 0.916666666666667]
+MF3='High':'trimf',[0.583333333333333 1 1.41666666666667]
+
+[Input6]
+Name='Cleaned_temp_c_(Temp)'
+Range=[34 42]
+NumMFs=3
+MF1='Low':'trapmf',[31 33.67 34.33 37]
+MF2='Normal':'gaussmf',[1.416 38]
+MF3='High':'trapmf',[39 41.67 42.33 45]
+
+[Input7]
+Name='Cleaned_stress_index_(Stress)'
+Range=[0 100]
+NumMFs=3
+MF1='Low':'zmf',[4.167 37.5]
+MF2='Medium':'trimf',[8.33333333333334 50 91.6666666666667]
+MF3='High':'smf',[62.5 95.83]
+
+[Output1]
+Name='Risk'
+Range=[0 100]
+NumMFs=3
+MF1='Low':'trimf',[0 0 35]
+MF2='Moderate':'trimf',[30 50 70]
+MF3='High':'trapmf',[65 85 100 100]
+
+[Rules]
+0 1 0 0 0 0 3, 3 (1) : 2
+3 0 0 0 0 3 0, 3 (1) : 1
+3 2 0 0 0 0 3, 2 (1) : 1
+3 0 0 1 3 0 0, 3 (1) : 1
+0 1 0 0 0 1 0, 3 (1) : 1
+0 0 0 0 2 3 0, 2 (1) : 1
+2 2 0 2 0 0 0, 1 (1) : 1
+0 0 0 0 2 0 1, 1 (0.5) : 1
+3 0 0 1 0 0 0, 3 (1) : 1
